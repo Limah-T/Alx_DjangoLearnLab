@@ -1,1 +1,0 @@
-This consists of the Django insatllation and settings.
