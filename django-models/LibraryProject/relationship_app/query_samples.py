@@ -1,7 +1,6 @@
 from .models import Book, Author, Library, Librarian
 
-author_name = Author.objects.create(name="Limah")
-author_name.save()
+author_name = Author.objects.get(name="Limah")
 book = Book.objects.create(title="Python", author=author_name)
 book.save()
 book = Book.objects.create(title="Flask", author=author_name)
