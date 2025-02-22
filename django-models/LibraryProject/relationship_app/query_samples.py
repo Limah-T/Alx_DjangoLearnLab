@@ -21,5 +21,6 @@ library.save()
 librarian = Librarian(name = "Palmer")
 librarian.save()
 
-
+librarian = Librarian.objects.filter(library=librarian)
+print(librarian)
 
