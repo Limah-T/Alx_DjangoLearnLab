@@ -5,7 +5,6 @@ author_name.save()
 
 author = Author.objects.get(name=author_name)
 author = Author.objects.filter(author = author)
-# ["Author.objects.get(name=author_name)", "objects.filter(author=author)"]
 
 author_name = author.objects.filter(author = author)
 book = Book.objects.create(title="Python", author=author_name)
@@ -26,6 +25,6 @@ books = Library.objects.get(name=library_name)
 books.all()
 
 # Retrieve the librarian for a library.
-librarian = Librarian.objects.filter(library=librarian_name)
+librarian = Librarian.objects.get(library=librarian_name)
 print(librarian_name)
 
