@@ -51,7 +51,7 @@ def is_member(user):
 
 @login_required
 @user_passes_test(is_admin)
-def librarian_view(request):
+def admin_view(request):
     return render(request, 'admin_view')
 
 @login_required
@@ -61,7 +61,7 @@ def librarian_view(request):
 
 @login_required
 @user_passes_test(is_member)
-def librarian_view(request):
+def member_view(request):
     return render(request, 'member_view')
 
 
