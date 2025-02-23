@@ -40,6 +40,9 @@ def profile_view(request):
     # This view can only be accessed by authenticated users
     return render(request, 'profile.html')
 
+def is_admin(user):
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Admin'
+
 def is_librarian(user):
     return hasattr(user, 'userprofile') and user.userprofile.role == "Librarian"
 
