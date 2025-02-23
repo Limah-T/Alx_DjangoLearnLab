@@ -5,12 +5,10 @@ from .models import UserProfile
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User, Permission
 from django.urls import reverse_lazy
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
-from django.shortcuts import get_object_or_404
-from django.contrib.contenttypes.models import ContentType
+
 
 # Create your views here
 def list_books(request):
@@ -42,40 +40,33 @@ def profile_view(request):
     # This view can only be accessed by authenticated users
     return render(request, 'profile.html')
 
-        
-def admin_view(request, user_id):
-    user = get_object_or_404(UserProfile, pk=user_id)
-    # any permission check will cache the current set of permissions
-    user.has_perm("relationship_app.admin_view")
-    content_type = ContentType.objects.get_for_model(UserProfile)
-    permission = Permission.objects.get(
-        codename="change_blogpost",
-        content_type=content_type,
-    )
-    user.user_permissions.add(permission)
+def is_admin(user):
+    return user.userprofile.role == 'Admin'
 
-def librarian_view(request, user_id):
-    # Checking the cached permission set
-    user = get_object_or_404(User, pk=user_id)
-    user.has_perm("relationship_app.librarian_view")  # False
-    content_type = ContentType.objects.get_for_model(UserProfile)
-    permission = Permission.objects.get(
-        codename="change_blogpost",
-        content_type=content_type,
-    )
+def is_librarian(user):
+    return user.userprofile.role == "Librarian"
 
-    user.user_permissions.add(permission)
+def is_member(user):
+    return user.userprofile.role == "Member"
 
-def member_view(request, user_id):
-    # Checking the cached permission set
-    user = get_object_or_404(User, pk=user_id)
-    user.has_perm("relationship_app.member_view")  # False
-    content_type = ContentType.objects.get_for_model(UserProfile)
-    permission = Permission.objects.get(
-        codename="change_blogpost",
-        content_type=content_type,
-    )
+@login_required
+@user_passes_test(is_admin)
+def librarian_view(request):
+    return render(request, 'admin_view')
 
-    user.user_permissions.add(permission)
+@login_required
+@user_passes_test(is_librarian)
+def librarian_view(request):
+    return render(request, 'librarian_view')
+
+@login_required
+@user_passes_test(is_member)
+def librarian_view(request):
+    return render(request, 'member_view')
+
+
+
+
+
 
 
