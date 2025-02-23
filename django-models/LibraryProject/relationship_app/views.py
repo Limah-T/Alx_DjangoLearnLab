@@ -8,7 +8,6 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 
-
 # Create your views here
 def list_books(request):
     books = Book.objects.all()
@@ -18,7 +17,18 @@ class LibraryDetailView(DetailView):
     model = Library
     template_name = 'relationship_app/library_detail.html'
     context_object_name = "library"
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, template_name='relationship_app.register.html', name='register')
+    else:
+        form = UserCreationForm()
+        return render(request, template_name='relationship_app.register.html')
     
+
 class SignUpView(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy(login)
