@@ -23,10 +23,10 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, template_name='relationship_app.register.html', name='register')
+            return render(request, template_name='relationship_app/register.html', name='register')
     else:
         form = UserCreationForm()
-        return render(request, template_name='relationship_app.register.html')
+        return render(request, template_name='relationship_app/register.html')
 
 class LoginView(CreateView):
     form_class = UserCreationForm
