@@ -40,17 +40,18 @@ class User(models.Model):
         return f"User: {self.name}, {self.email}"
     
 class UserProfile(models.Model):
-    choices = {
-        'ADMIN': 'Admin',
-        'LIBRARIAN': 'Libarian',
-        'MEMBER': 'Member'
-    }
-    role = models.CharField(max_length=100, choices=choices, default=choices['MEMBER'])
+    ROLE_CHOICES = [
+        ('ADMIN', 'Admin'),
+        ('LIBRARIAN', 'Librarian'),  # Fixed Typo
+        ('MEMBER', 'Member')
+    ]
+    
+    role = models.CharField(max_length=100, choices=ROLE_CHOICES, default='MEMBER')
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_profile')
 
     def __str__(self):
-        return f"UserProfile: {self.role} to {UserProfile.user.username}"
-    
+        return f"UserProfile: {self.role} to {self.user.username}"
+
 # Automatically create a UserProfile when a user is created
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -59,7 +60,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.userprofile.save()
-
-
+    if hasattr(instance, 'user_profile'):
+        instance.user_profile.save()
     
