@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
@@ -16,6 +17,7 @@ class CustomUser(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
     profile_photo = models.ImageField(null=True, blank=True)
 
+
     def __str__(self):
         return f"{self.username}: {self.email} {self.date_of_birth}"
 
@@ -25,6 +27,25 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.role}"
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, username = None, email=None, password=None, date_of_birth=None, profile_photo=None):
+        if not email:
+            raise ValueError("The email field is required")
+        if date_of_birth:
+            raise ValueError("The date of birth must be set")
+        email = self.normalize_email(email)
+        user = self.model(
+            username=username,
+            email=email,
+            date_of_birth=date_of_birth,
+            profile_photo=profile_photo
+        )
+        return user
+
+    def create_superuser(self):
+        ...
+
 
 # Signal to create or update UserProfile whenever a User is created
 @receiver(post_save, sender=CustomUser)
