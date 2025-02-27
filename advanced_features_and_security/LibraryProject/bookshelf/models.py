@@ -30,18 +30,7 @@ class UserProfile(models.Model):
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username = None, email=None, password=None, date_of_birth=None, profile_photo=None):
-        if not email:
-            raise ValueError("The email field is required")
-        if date_of_birth:
-            raise ValueError("The date of birth must be set")
-        email = self.normalize_email(email)
-        user = self.model(
-            username=username,
-            email=email,
-            date_of_birth=date_of_birth,
-            profile_photo=profile_photo
-        )
-        return user
+        ...
 
     def create_superuser(self):
         ...
