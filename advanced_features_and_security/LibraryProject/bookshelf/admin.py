@@ -11,4 +11,3 @@ class BookAdmin(admin.ModelAdmin):
 
 admin.site.register(Book, BookAdmin)
 admin.site.register(CustomUser, CustomUserAdmin)
-# user = CustomUser.objects.create_user(username="Root", email="root@gmail.com",password="123root098", date_of_birth="1990-1-1")
