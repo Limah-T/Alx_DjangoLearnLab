@@ -34,6 +34,7 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 # HTTP Strict Transport Security (HSTS) settings:
+SECURE_SSL_REDIRECT = True
 SECURE_HSTS_SECONDS = 31536000  # Enforce HTTPS for one year.
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains.
 SECURE_HSTS_PRELOAD = True  # Enable HSTS preload; register your domain with browser vendors.
