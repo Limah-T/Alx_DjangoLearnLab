@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib.auth.decorators import permission_required
 from .models import CustomUser
-from .forms import LoginForm
+from .forms import ExampleForm
 from django.contrib.auth import login, authenticate, hashers
 
 @permission_required('bookshelf.can_view_book', raise_exception=True)
@@ -28,7 +28,7 @@ def edit_view(request):
 # Login authentication
 def login_user(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = ExampleForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
@@ -47,7 +47,7 @@ def login_user(request):
             else:
                 form.add_error('email', 'User with this email does not exist!')
     else:
-        form = LoginForm()
+        form = ExampleForm()
     return render(request, 'bookshelf/form_example.html', {'form': form})
     
 
