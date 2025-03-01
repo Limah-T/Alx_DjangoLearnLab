@@ -33,7 +33,12 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
-ALLOWED_HOSTS = ['*']
+# HTTP Strict Transport Security (HSTS) settings:
+SECURE_HSTS_SECONDS = 31536000  # Enforce HTTPS for one year.
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains.
+SECURE_HSTS_PRELOAD = True  # Enable HSTS preload; register your domain with browser vendors.
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'www.limahtech.com']
 
 # This will tell django where to send users who aren't authenticated
 LOGIN_URL = '/accounts/login_user'
