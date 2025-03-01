@@ -24,11 +24,21 @@ SECRET_KEY = 'django-insecure-5bsa8jg%va=!+^s8l2g8^#)9s5b+p*e_y80owow*9zsrnjbqxb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Configuration for browser-side security settings.
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
+# To ensure cookies are set over over HTTPS only.
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+ALLOWED_HOSTS = ['*']
+
+# This will tell django where to send users who aren't authenticated
+LOGIN_URL = '/accounts/login_user'
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,6 +52,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'csp.middleware.CSPMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -49,6 +60,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CSP_DEFAULT_SRC = ("'self'",)
 
 ROOT_URLCONF = 'LibraryProject.urls'
 
