@@ -39,13 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'rest_framework',
+    'django_filters',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSIONS_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
         'rest_framework.permissions.IsAuthenticated',
-        ]
+        ],
+    'DEFAULT_FILTER_BACKENDS':['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 MIDDLEWARE = [
