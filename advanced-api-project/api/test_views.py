@@ -1,13 +1,12 @@
-from django.test import TestCase
 from django.contrib.auth.models import User
-from rest_framework.test import APIRequestFactory, force_authenticate
+from rest_framework.test import APIRequestFactory, force_authenticate, APITestCase
 from rest_framework import status
 from .models import Author, Book
 from .views import ListView, CreateView, UpdateView, DeleteView
 
 # Create your tests here.
 
-class BookAPITest(TestCase):
+class BookAPITest(APITestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.user = User.objects.create_superuser(username="limah", password="password123")
