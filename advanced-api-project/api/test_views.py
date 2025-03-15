@@ -9,6 +9,7 @@ from .views import ListView, CreateView, UpdateView, DeleteView
 class BookAPITest(APITestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
+        self.client.login(username="limah_t", email="limah@gmail.com")
         self.user = User.objects.create_superuser(username="limah", password="password123")
         self.author = Author.objects.create(id=1, name="temitope")
         self.author_id = Author.objects.get(id=1)
