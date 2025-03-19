@@ -10,7 +10,7 @@ urlpatterns = [
     path('updateprofile/', views.updateprofile, name='updateprofile'),
     path('logout/', views.logoutview, name='logout'),
     path('user/<int:id>/', views.UserPageView.as_view(), name='userposts'),
-    path('posts/new/', views.createpostview, name='create-post'),
-    path('posts/<int:pk>/edit/', views.edit_post, name='update-post'),
-    path('posts/<int:pk>/delete/', views.delete_post, name='delete-post'),
+    path('post/new/', views.createpostview, name='create-post'),
+    path('post/<int:pk>/edit/', views.edit_post, name='update-post'),
+    path('post/<int:pk>/delete/', views.delete_post, name='delete-post'),
 ]

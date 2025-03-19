@@ -1,5 +1,4 @@
-from django.http import response, HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from .forms import RegistrationForm, LoginForm, UserProfileForm, CreatePostForm, UpdatePostForm
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -11,6 +10,8 @@ from django.views import generic
 from .models import Post
 from django.urls import reverse_lazy
 from datetime import datetime
+from django.contrib.auth.mixins import UserPassesTestMixin
+
 # Create your views here.
 class HomePageView(LoginRequiredMixin, generic.ListView):
     model = Post
@@ -101,6 +102,7 @@ class UserPageView(LoginRequiredMixin, generic.ListView):
 [generic.CreateView]
 [generic.UpdateView]
 [generic.DeleteView]
+[UserPassesTestMixin]
 @login_required(login_url=reverse_lazy('login'))
 def createpostview(request):
     if request.method == 'POST':
