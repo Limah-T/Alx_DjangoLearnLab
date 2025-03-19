@@ -98,6 +98,9 @@ class UserPageView(LoginRequiredMixin, generic.ListView):
         user_posts = super().get_queryset().filter(author=author_id)
         return user_posts
 
+[generic.CreateView]
+[generic.UpdateView]
+[generic.DeleteView]
 @login_required(login_url=reverse_lazy('login'))
 def createpostview(request):
     if request.method == 'POST':
