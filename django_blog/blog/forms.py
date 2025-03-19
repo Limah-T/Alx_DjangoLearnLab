@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
+from .models import Post
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(label='Your Email')
@@ -37,3 +38,28 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email']
+
+class CreatePostForm(forms.ModelForm):
+    title = forms.CharField(max_length=100)
+    content = forms.CharField(widget=forms.TextInput())
+
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'author']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        title = cleaned_data.get('title')
+        content = cleaned_data.get('content')
+        if title and content:
+            return cleaned_data
+        
+class UpdatePostForm(forms.ModelForm):
+    title = forms.CharField(max_length=100)
+    content = forms.CharField(widget=forms.TextInput())
+
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'author']
+
+

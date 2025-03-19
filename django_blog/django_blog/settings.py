@@ -135,4 +135,4 @@ STATIC_FILES_DIR = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = 'blog/home'
+LOGIN_REDIRECT_URL = '/blog/home/'

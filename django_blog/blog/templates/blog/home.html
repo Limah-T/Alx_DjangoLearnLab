@@ -2,5 +2,28 @@
 {% load static %}
 {% block title %}Home{% endblock %}
 {% block content %}
-    <p>Welcome</p>
+    <p>Welcome {{ user }}</p>
+    <section>
+        {% for post in all_posts %}
+            <ul style="list-style: none;">
+                <li>Author: <a href="{% url 'userposts' post.author.id %}">{{post.author.username}}</a></li>
+                <li>Post Title: {{post.title}}</li>
+                <li>Post Content: {{post.content}} </li>
+                <li>Date Published: {{post.published_date}} </li>
+                {% if post.author == user %}
+                    <form method="POST" action="{% url 'update-post' post.id %}">
+                        {% csrf_token %}
+                        <button style="background-color: black; color: white;cursor: pointer;">Edit post
+                        </button>
+                    </form>
+                    <form method="POST" action="{% url 'delete-post' post.id %}">
+                        {% csrf_token %}
+                        <button style="background-color: red; color: white;cursor: pointer;">Delete post
+                        </button>
+                    </form>
+                    
+                {% endif %}
+            </ul>
+        {% endfor %}
+    </section>
 {% endblock %}
