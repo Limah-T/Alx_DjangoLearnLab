@@ -118,6 +118,7 @@ class UserPageView(LoginRequiredMixin, generic.ListView):
 [generic.UpdateView, 'blog/post_list.html']
 [generic.DeleteView, 'blog/post_detail.html']
 [UserPassesTestMixin, 'blog/post_delete.html', 'blog/post_edit.html']
+["CommentCreateView", "CommentUpdateView", "CommentDeleteView"]
 @login_required(login_url=reverse_lazy('login'))
 def createpostview(request):
     if request.method == 'POST':
