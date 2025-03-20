@@ -14,9 +14,7 @@
                     {% csrf_token %}
                     <button style="background-color: burlywood; color: brown;cursor: pointer;">Add Comment 
                     </button>
-                   
-                            {{count}} comment(s)
-                       
+                    {{count}} comment(s)   
                 </form>
                 {% if post.author.id == user.id %}
                     <form method="POST" action="{% url 'update-post' post.id %}">

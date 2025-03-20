@@ -169,22 +169,22 @@ def view_post(request, pk):
     return render(request, 'blog/view_post.html', {'form': form, 'post': post, 'all_comments': all_comments, 'post_author': post.author.username})
 
 @login_required
-def add_comment(request, post_id):
-    print(post_id)
+def add_comment(request, pk):
+    print(pk)
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
             content = form.cleaned_data['content']
-            post = Post.objects.get(id=post_id)
+            post = Post.objects.get(id=pk)
             user_id = User.objects.get(id=request.user.id)
             comment = form.save(commit=False) # Do not save yet
             comment.post = post
             comment.author = user_id
             comment.content = content
             comment.save() # Now you can save
-            return redirect('view-post', post_id)
+            return redirect('view-post', pk)
     form = CommentForm()
-    return redirect('view-post', post_id, {'form': form})
+    return redirect('view-post', pk, {'form': form})
 
 @login_required
 def delete_comment(request, pk):
