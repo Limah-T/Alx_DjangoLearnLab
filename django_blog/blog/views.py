@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import RegistrationForm, LoginForm, UserProfileForm, CreatePostForm, UpdatePostForm
+from .forms import RegistrationForm, LoginForm, UserProfileForm, CreatePostForm, UpdatePostForm, CommentForm
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
@@ -7,10 +7,11 @@ from django.contrib.auth import authenticate, login, logout, get_user
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views import generic
-from .models import Post
+from .models import Post, Comment
 from django.urls import reverse_lazy
 from datetime import datetime
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.http import HttpResponse
 
 # Create your views here.
 class HomePageView(LoginRequiredMixin, generic.ListView):
@@ -21,7 +22,12 @@ class HomePageView(LoginRequiredMixin, generic.ListView):
     login_url = 'login'
     redirect_field_name = 'next'
     ordering = ['-published_date']
-    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # print(self.kwargs)
+        context['count'] = Comment.objects.all().count()
+        return context
 
 class RegisterView(FormView):
     template_name = 'blog/register.html'
@@ -98,6 +104,15 @@ class UserPageView(LoginRequiredMixin, generic.ListView):
         author_id = self.kwargs['id']
         user_posts = super().get_queryset().filter(author=author_id)
         return user_posts
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = CommentForm()  # Add the form to the context
+        # To pass the author's name for each post creator
+        author = self.kwargs.get('id')
+        context['author'] = User.objects.get(id=author).username
+        return context
+    
 
 [generic.CreateView, 'blog/post_create.html']
 [generic.UpdateView, 'blog/post_list.html']
@@ -113,7 +128,7 @@ def createpostview(request):
             author = form.cleaned_data['author']
             today = datetime.today()
             post = Post.objects.create(title=title, content=content, author=author, published_date=today)
-            form.save(post)
+            # form.save(post)
             print('Post saved!')
             return redirect('home')
     form = CreatePostForm()
@@ -138,3 +153,46 @@ def delete_post(request, pk):
         if post and post.author == request.user:
             post.delete()
     return redirect ('home')
+
+@login_required
+def view_post(request, pk):
+    post = Post.objects.get(id=pk)
+    if request.method == 'POST':
+        if post:
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                print(form.cleaned_data['content'])
+                return redirect('home')
+    all_comments = Comment.objects.filter(post=post)
+    form = CommentForm()
+    return render(request, 'blog/view_post.html', {'form': form, 'post': post, 'all_comments': all_comments, 'post_author': post.author.username})
+
+@login_required
+def add_comment(request, post_id):
+    print(post_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            content = form.cleaned_data['content']
+            post = Post.objects.get(id=post_id)
+            user_id = User.objects.get(id=request.user.id)
+            comment = form.save(commit=False) # Do not save yet
+            comment.post = post
+            comment.author = user_id
+            comment.content = content
+            comment.save() # Now you can save
+            return redirect('view-post', post_id)
+    form = CommentForm()
+    return redirect('view-post', post_id, {'form': form})
+
+@login_required
+def delete_comment(request, pk):
+    if request.method == 'POST':
+        comment = Comment.objects.get(id=pk)
+        post_id = comment.post.id
+        print(post_id)
+        print(comment.content)
+        if comment and (request.user.id == comment.author.id):
+            comment.delete()
+            return redirect('view-post', post_id)
+    return HttpResponse("All good")

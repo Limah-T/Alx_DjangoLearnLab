@@ -3,7 +3,7 @@
 {% block title %}Home{% endblock %}
 {% block content %}
     <section>
-        <h1>{{user.username}}'s page</h1>
+        <h1>{{author}}'s page</h1>
         {% for post in user_posts %}
             <ul style="list-style: none;">
                 <li>Posted By: {{post.author.username}}</li>
@@ -11,6 +11,11 @@
                 <li>Post Content: {{post.content}} </li>
                 <li>Date Published: {{post.published_date}} </li>
             </ul>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <button style="background-color: burlywood; color: brown;cursor: pointer;">Add Comment
+                </button>
+            </form>
         {% endfor %}
     </section>
 {% endblock %}

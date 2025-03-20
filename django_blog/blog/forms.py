@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
-from .models import Post
+from .models import Post, Comment
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(label='Your Email')
@@ -62,4 +62,14 @@ class UpdatePostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content', 'author']
 
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']
 
+    def clean(self):
+        cleaned_data = super().clean()
+        return cleaned_data
+        
+    
+    
