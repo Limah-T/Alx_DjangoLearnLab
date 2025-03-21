@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
 from .models import Post, Comment
-from taggit.managers import TaggableManager
+from taggit.forms import TagWidget
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(label='Your Email')
@@ -43,10 +43,12 @@ class UserProfileForm(forms.ModelForm):
 class CreatePostForm(forms.ModelForm):
     title = forms.CharField(max_length=100)
     content = forms.CharField(widget=forms.TextInput())
-
     class Meta:
         model = Post
         fields = ['title', 'content', 'author', 'tags']
+        widgets = {
+            'tags': TagWidget(attrs={'class': 'form-control'}),  # Use TagWidget for tag input
+        }
 
     def clean(self):
         cleaned_data = super().clean()
@@ -74,5 +76,5 @@ class CommentForm(forms.ModelForm):
         
 class SearchForm(forms.Form):
     name=forms.CharField(max_length=255)
-       
+
     
