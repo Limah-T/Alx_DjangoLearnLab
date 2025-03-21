@@ -10,6 +10,7 @@
                 <li>Post Title: {{post.title}}</li>
                 <li>Post Content: {{post.content}} </li>
                 <li>Date Published: {{post.published_date}} </li>
+                <li>Tag: {{post.tags}} </li>
             </ul>
             <form method="POST" action="">
                 {% csrf_token %}

@@ -1,23 +1,24 @@
 from django.shortcuts import render, redirect
-from .forms import RegistrationForm, LoginForm, UserProfileForm, CreatePostForm, UpdatePostForm, CommentForm
+from .forms import RegistrationForm, LoginForm, UserProfileForm, CreatePostForm, UpdatePostForm, CommentForm, SearchForm
 from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
-from django.contrib.auth import authenticate, login, logout, get_user
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.views import generic
-from .models import Post, Comment
+from .models import Post, Comment, Tag
 from django.urls import reverse_lazy
-from datetime import datetime
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponse
+from django.db.models import Q
 
 # Create your views here.
-class HomePageView(LoginRequiredMixin, generic.ListView):
+class HomePageView(LoginRequiredMixin, generic.ListView, FormView):
     model = Post
     template_name = 'blog/home.html'
     context_object_name = 'all_posts'
+    form_class = SearchForm
     # Redirect unauthenticated users to login page
     login_url = 'login'
     redirect_field_name = 'next'
@@ -28,6 +29,10 @@ class HomePageView(LoginRequiredMixin, generic.ListView):
         # print(self.kwargs)
         context['count'] = Comment.objects.all().count()
         return context
+    
+    def get_queryset(self):
+        context = super().get_queryset().prefetch_related('tags')  
+        return context      
 
 class RegisterView(FormView):
     template_name = 'blog/register.html'
@@ -124,12 +129,9 @@ def createpostview(request):
     if request.method == 'POST':
         form = CreatePostForm(request.POST)
         if form.is_valid():
-            title = form.cleaned_data['title']
-            content = form.cleaned_data['content']
-            author = form.cleaned_data['author']
-            today = datetime.today()
-            post = Post.objects.create(title=title, content=content, author=author, published_date=today)
-            # form.save(post)
+            post = form.save(commit=False)
+            post.save()
+            form.save_m2m()
             print('Post saved!')
             return redirect('home')
     form = CreatePostForm()
@@ -197,3 +199,18 @@ def delete_comment(request, pk):
             comment.delete()
             return redirect('view-post', post_id)
     return HttpResponse("All good")
+
+@login_required
+def search(request):
+    query = request.GET.get('q', '')  # Get search term from URL query parameter
+    posts = Post.objects.all()  # Default: show all posts
+    
+    if query:
+        print(query)
+        posts = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)  # Fix: Searching for tag names
+        ).distinct()  # Avoid duplicate posts if multiple fields match
+
+    return render(request, 'blog/search_results.html', {'all_posts': posts, 'query': query})

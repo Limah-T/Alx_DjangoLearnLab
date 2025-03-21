@@ -16,6 +16,8 @@ urlpatterns = [
     path('post/<int:pk>/delete/', views.delete_post, name='delete-post'),
     path('post/<int:pk>/comments/new/', views.add_comment, name='add-comment'),
     path("comment/<int:pk>/delete/", views.delete_comment, name='delete-comment'),
+    path('search/', views.search, name='search'),
 ]
 
 ["comment/<int:pk>/update/"]
+["/tags/<tag_name>/"]
