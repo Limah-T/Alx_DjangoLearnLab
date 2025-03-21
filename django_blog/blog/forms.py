@@ -43,12 +43,11 @@ class UserProfileForm(forms.ModelForm):
 class CreatePostForm(forms.ModelForm):
     title = forms.CharField(max_length=100)
     content = forms.CharField(widget=forms.TextInput())
+    tags = forms.CharField(widget=TagWidget())
     class Meta:
         model = Post
         fields = ['title', 'content', 'author', 'tags']
-        widgets = {
-            'tags': TagWidget(attrs={'class': 'form-control'}),  # Use TagWidget for tag input
-        }
+        
 
     def clean(self):
         cleaned_data = super().clean()
