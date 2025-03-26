@@ -1,0 +1,17 @@
+{% extends 'accounts/base.html' %}
+{% block title %}{{user}}{% endblock %}
+{% load static%}
+{% block content %}
+    <section>
+        {% if user.profile_photo %}
+        <img src="{{ user.profile_photo.url }}" alt="Profile photo">
+        {% else %}
+        <img src="{% static 'images/default_profile.png' %}" alt="default profile_photo"> 
+        {% endif %}
+    </section>
+    <section>
+        <p><strong>Username: </strong>{{user.username}}</p>
+        <p><strong>Bio: </strong>{{user.bio}}</p>
+        <p><strong>Date joined: </strong>{{user.date_joined}}</p>
+    </section>
+{% endblock %}
