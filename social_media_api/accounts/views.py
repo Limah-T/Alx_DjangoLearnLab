@@ -65,15 +65,17 @@ class LoginAPIView(APIView):
     permission_classes = [AllowAny]
     
     def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
+        serializers = LoginSerializer(data=request.data)
+        if serializers.is_valid():
             print('inside')
-            username = serializer.validated_data.get('username')
-            password = serializer.validated_data.get('password')
+            username = serializers.validated_data.get('username')
+            password = serializers.validated_data.get('password')
             user = authenticate(request, username=username, password=password)
             if user:
                 token = Token.objects.get(user=user)
                 login(request, user)
                 return Response({'token': token.key}, status=status.HTTP_200_OK)
-        print('outside')
-        return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+            print('outside')
+            return Response({'error': 'username or password is incorrect!'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializers.errors,status=status.HTTP_400_BAD_REQUEST)
+

@@ -31,4 +31,3 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()
     REQUIRED_FIELDS = ['bio', 'profile_photo', 'followers']
 
-    
