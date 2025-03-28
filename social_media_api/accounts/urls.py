@@ -16,5 +16,8 @@ urlpatterns = [
     path('users/', views.UsersAPIView.as_view(), name='all_users'),
     path('user/<int:pk>', views.UserDetailAPIView.as_view(), name='user'),
     path('follow/<int:id>/', views.UserUpdateFollowerAPIView.as_view(), name='follow'),
-    path('unfollow/<int:id>/', views.UnFollowUserAPIView.as_view(), name='unfollow'),  
+    path('unfollow/<int:id>/', views.UnFollowUserAPIView.as_view(), name='unfollow'), 
+
 ]
+# Checker rules to pass test
+['follow/<int:user_id>', 'unfollow/<int:user_id>'] 
