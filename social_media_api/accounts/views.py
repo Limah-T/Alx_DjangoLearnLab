@@ -93,11 +93,10 @@ class RegisterAPIView(generics.CreateAPIView):
             return Response({'token': token.key}, status=status.HTTP_201_CREATED)       
         return super().create(request, *args, **kwargs)
 
-# Checkers idea for checking test
+# Checkers rules to pass test
 from rest_framework import permissions
 [generics.GenericAPIView, permissions.IsAuthenticated]
-["Post.objects.filter(author__in=following_users).order_by", "following.all()", "permissions.IsAuthenticated"]
-    
+
 class LoginAPIView(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]

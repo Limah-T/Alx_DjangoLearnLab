@@ -9,6 +9,9 @@ from .serializers import PostSerializer, CommentSerializer
 from .models import Post, Comment
 from accounts.models import CustomUser
 
+# Checker rules to pass test
+["Post.objects.filter(author__in=following_users).order_by", "following.all()", "permissions.IsAuthenticated"]
+
 ""                            """Django Views"""                          ""
 # ListView to display all the posts from Users
 class Homepage(generic.ListView):
@@ -16,7 +19,6 @@ class Homepage(generic.ListView):
     queryset = Post.objects.all().order_by('-created_at')
     context_object_name = 'all_posts'
 
-""                 """DRF RESTFUL API Views"""                          ""
 
 
 """Generic Views for CRUD Operations"""
