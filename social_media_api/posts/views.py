@@ -4,9 +4,20 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status, viewsets
 from django_filters.rest_framework import DjangoFilterBackend
+from django.views import generic
 from .serializers import PostSerializer, CommentSerializer
 from .models import Post, Comment
 from accounts.models import CustomUser
+
+""                            """Django Views"""                          ""
+# ListView to display all the posts from Users
+class Homepage(generic.ListView):
+    template_name = 'posts/home.html'
+    queryset = Post.objects.all().order_by('-created_at')
+    context_object_name = 'all_posts'
+
+""                 """DRF RESTFUL API Views"""                          ""
+
 
 """Generic Views for CRUD Operations"""
 # class CreateView(generics.CreateAPIView):
@@ -147,3 +158,4 @@ class CommentView(viewsets.ModelViewSet):
         if current_user_id != author_id:
             return Response(data={'Error': 'You are not permmitted to delete a comment that you did not create!'}, status=status.HTTP_403_FORBIDDEN)
         return super().destroy(request, *args, **kwargs)
+    

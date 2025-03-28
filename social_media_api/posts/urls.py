@@ -1,12 +1,20 @@
 from django.urls import path, include
 from . import views
+from accounts import views as account_views
 from rest_framework.routers import DefaultRouter
 
+app_name = 'posts'
+
+['feeds/']
 router = DefaultRouter()
 router.register(r'post', views.PostView)
 router.register(r'comment', views.CommentView)
 
 urlpatterns = [
+# """URLs For Post App"""
+    path('home', views.Homepage.as_view(), name='home'),
+    
+
 # """Post API Endpoints for Generic View"""
     # path('post/create', views.CreateView.as_view()),
     # path('posts', views.ListView.as_view()),

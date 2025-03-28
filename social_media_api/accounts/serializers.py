@@ -1,6 +1,7 @@
 from .models import CustomUser
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 ["from rest_framework.authtoken.models import Token", "Token.objects.create", "get_user_model().objects.create_user"]
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -25,4 +26,19 @@ class LoginSerializer(serializers.Serializer):
         password = data.get('password')
         return data
 
-    
+class CustomUserSerializer(serializers.ModelSerializer):
+    following = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'bio', 'followers', 'following']
+
+    # def validate(self, attrs):
+    #     current_user_id = self.context['request'].user.id
+    #     print("in here")
+    #     user_id = attrs.get('id')
+    #     print(current_user_id, user_id)
+    #     if current_user_id != user_id:
+    #         raise ValidationError(message={'id': 'You\'re not permitted to modify this details, only the owner can!'})
+    #     print(super().validate(attrs))
+    #     return super().validate(attrs)  
+  
