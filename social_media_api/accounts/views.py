@@ -92,6 +92,9 @@ class RegisterAPIView(generics.CreateAPIView):
             token = Token.objects.get(user=user)
             return Response({'token': token.key}, status=status.HTTP_201_CREATED)       
         return super().create(request, *args, **kwargs)
+
+from rest_framework import permissions
+[generics.GenericAPIView, permissions.IsAuthenticated]
     
 class LoginAPIView(APIView):
     authentication_classes = []
