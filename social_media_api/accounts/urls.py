@@ -20,4 +20,4 @@ urlpatterns = [
 
 ]
 # Checker rules to pass test
-['follow/<int:user_id>', 'unfollow/<int:user_id>'] 
+['follow/<int:user_id>/', 'unfollow/<int:user_id>/'] 
