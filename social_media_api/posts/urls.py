@@ -11,8 +11,8 @@ router.register(r'comment', views.CommentView)
 
 urlpatterns = [
 # """URLs For Post App"""
-    path('home', views.Homepage.as_view(), name='home'),
-    
+    path('home', views.Homepage.as_view(), name='home'),  
+    path('like_post/<int:post_id>/<int:user_id>/', views.like_post, name='like_post'), 
 
 # """Post API Endpoints for Generic View"""
     # path('post/create', views.CreateView.as_view()),

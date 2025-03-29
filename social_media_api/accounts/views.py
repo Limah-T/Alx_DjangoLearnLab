@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.edit import FormView
 from django.http import HttpResponse
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import generics, status
@@ -12,8 +12,9 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from .forms import RegistrationForm
 from .models import CustomUser
-from posts.models import Post
+from posts.models import Post, Like
 from .serializers import RegistrationSerializer, LoginSerializer, CustomUserSerializer
+from notification.models import Notifications
 
 # Create your views here.
 class RegistrationView(FormView):
@@ -29,10 +30,10 @@ class RegistrationView(FormView):
             form.save()
         return super().form_valid(form)
     
-# class HomePage(generic.ListView):
-#     model = CustomUser
-#     template_name = 'accounts/home.html'
-#     context_object_name = 'all_users'
+class HomePage(generic.ListView):
+    model = CustomUser
+    template_name = 'accounts/home.html'
+    context_object_name = 'all_users'
 
 # DetailView for display a user profile
 class ProfileView(generic.DetailView):

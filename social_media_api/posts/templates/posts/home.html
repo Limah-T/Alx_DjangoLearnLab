@@ -16,7 +16,9 @@
             <li>Date: {{post.created_at}}</li>
             <li>Updated: {{post.updated_at}}</li>
             <br>
-            <button style="background-color: rgb(255, 156, 120); color: white;">❤️</button>
+            <a href="{% url 'like_post' post.id post.author.id %}">
+                <button style="background-color: rgb(255, 156, 120); color: white;">❤️</button>
+            </a>
         <button style="background-color: yellowgreen; color: black;">💬</button>
         </ul>
         
